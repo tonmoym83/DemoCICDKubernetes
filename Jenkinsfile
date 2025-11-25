@@ -4,14 +4,15 @@ pipeline {
         maven 'Maven3'   // matches the name in Global Tool Config
     }
 environment {
-    IMAGE_NAME = "demo-kubernetes"
-    IMAGE_TAG  = "latest"
-}
+        IMAGE_NAME = "demo-kubernetes"
+        IMAGE_TAG  = "latest"
+        REGISTRY   = "docker.io/tonmoym83"   // or ghcr.io/your-org
+    }
 
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/tonmoym83/DemoKubernetes.git'
+                git branch: 'main', url: 'https://github.com/tonmoym83/DemoCICDKubernetes.git'
             }
         }
 
@@ -23,17 +24,17 @@ environment {
 stage('Docker Build') {
     steps {
         bat """
-            docker build -t %IMAGE_NAME%:%IMAGE_TAG% .
+            docker build -t demo-CICDkubernetes:latest .
         """
     }
 }
 
-
-       stage('Deploy to Docker Desktop') {
+       stage('Deploy to Kubernetes') {
     steps {
         bat """
-            docker rm -f springboot-container || echo No old container
-            docker run -d -p 8080:8080 --name springboot-container demo-kubernetes:latest
+            kubectl delete deployment demo-CICDkubernetes --ignore-not-found
+            kubectl apply -f k8s/deployment.yaml
+            kubectl apply -f k8s/service.yaml
         """
     }
 }
