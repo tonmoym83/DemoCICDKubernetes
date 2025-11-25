@@ -4,7 +4,7 @@ pipeline {
         maven 'Maven3'   // matches the name in Global Tool Config
     }
 environment {
-        IMAGE_NAME = "demo-kubernetes"
+        IMAGE_NAME = "demo-cicdkubernetes"
         IMAGE_TAG  = "latest"
         REGISTRY   = "docker.io/tonmoym83"   // or ghcr.io/your-org
     }
@@ -24,7 +24,7 @@ environment {
 stage('Docker Build') {
     steps {
         bat """
-            docker build -t demo-CICDkubernetes:latest .
+            docker build -t demo-cicdkubernetes:latest .
         """
     }
 }
@@ -32,7 +32,7 @@ stage('Docker Build') {
        stage('Deploy to Kubernetes') {
     steps {
         bat """
-            kubectl delete deployment demo-CICDkubernetes --ignore-not-found
+            kubectl delete deployment demo-cicdkubernetes --ignore-not-found
             kubectl apply -f k8s/deployment.yaml
             kubectl apply -f k8s/service.yaml
         """
