@@ -29,13 +29,14 @@ stage('Docker Build') {
     }
 }
 
-       stage('Deploy to Kubernetes') {
+      stage('Deploy to Kubernetes') {
     steps {
-        bat """
-            kubectl delete deployment demo-cicdkubernetes --ignore-not-found
-            kubectl apply -f k8s/deployment.yaml
-            kubectl apply -f k8s/service.yaml
-        """
+        withEnv(["KUBECONFIG=C:\\Users\\Conta\\.kube\\config"]) {
+            bat """
+                kubectl apply -f k8s/deployment.yaml
+                kubectl apply -f k8s/service.yaml
+            """
+        }
     }
 }
     }
