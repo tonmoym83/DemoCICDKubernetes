@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: demo-CICDkubernetes
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: demo-CICDkubernetes
+  template:
+    metadata:
+      labels:
+        app: demo-CICDkubernetes
+    spec:
+      containers:
+      - name: demo-CICDkubernetes
+        image: demo-CICDkubernetes:latest   # local image
+        imagePullPolicy: IfNotPresent   # important for local builds
+        ports:
+        - containerPort: 8080
